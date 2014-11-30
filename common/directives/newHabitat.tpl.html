@@ -1,0 +1,43 @@
+<div ng-repeat="h in habitatsInternal" class="newHabitatBullet">
+    <div>
+        <a class="pointer"
+           editable-select="h.habitat"
+           buttons="no"
+           e-ng-options="habitat.key as habitat.title for habitat in availableHabitats"
+           onbeforesave="updateHabitat(h.id, $data)">
+            {{ translateHabitat(h.habitat) }}
+        </a>
+        <span class="pointer" ng-click="deleteHabitat($index)"><fo-icon icon="delete"></fo-icon></span>
+    </div>
+
+    <div>
+        <fo-icon icon="bulletHabitatPublic"></fo-icon>
+        <span ng-show="subhabitatsFor(h.habitat).length === 0">
+                nema podstaništa
+            </span>
+        <a class="pointer"
+           ng-hide="subhabitatsFor(h.habitat).length === 0"
+           buttons="no"
+           editable-select="h.subhabitat"
+           e-ng-options="subhabitat.key as subhabitat.title for subhabitat in subhabitatsFor(h.habitat)"
+           onbeforesave="updateSubhabitat(h.id, $data)">
+            {{ translateSubhabitat(h.habitat, h.subhabitat) || 'odaberi podstanište' }}
+        </a>
+    </div>
+
+    <div>
+        <fo-icon icon="bulletHabitatPublic"></fo-icon>
+        <fo-habitat-species habitat="h" update="updateSpecies"></fo-habitat-species>
+    </div>
+
+</div>
+<div>
+    <span class="pointer" ng-hide="editHabitat" ng-click="editHabitat = true">
+        <fo-icon icon="add"></fo-icon>dodaj
+    </span>
+    <select ng-model="newHabitat"
+            ng-options="habitat.key as habitat.title for habitat in availableHabitats"
+            ng-show="editHabitat">
+        <option value="" disabled="disabled">Odaberi stanište</option>
+    </select>
+</div>
